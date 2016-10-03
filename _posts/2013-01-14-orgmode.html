@@ -1,0 +1,540 @@
+---
+layout: post
+title: orgmode笔记
+categories: [binary, orgmode]
+comments: true
+---
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">大纲</h2>
+<div class="outline-text-2" id="text-1">
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1">定义标题</h3>
+<div class="outline-text-3" id="text-1-1">
+
+<p>使用星号(\*)进行定义, 用1到10个星号(\*)表示1到10级标题.
+注意:
+</p><ol>
+<li>*要位于每行的行首
+</li>
+<li>*之后要有一个空格, 然后再输入标题.
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2">大纲快捷键</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+</div>
+
+<div id="outline-container-1-2-1" class="outline-4">
+<h4 id="sec-1-2-1">折叠大纲</h4>
+<div class="outline-text-4" id="text-1-2-1">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<tbody>
+<tr><td class="left">快捷键</td><td class="left">命令</td><td class="left">说明</td></tr>
+<tr><td class="left">Shift-TAB</td><td class="left">org-shiftt</td><td class="left">循环切换整个文档的大纲状态</td></tr>
+<tr><td class="left">TAB</td><td class="left">org-cycle</td><td class="left">循环切换当前大纲的状态</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2-2" class="outline-4">
+<h4 id="sec-1-2-2">移动</h4>
+<div class="outline-text-4" id="text-1-2-2">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">快捷键</th><th scope="col" class="left">命令</th><th scope="col" class="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">C-c C-p/n</td><td class="left"></td><td class="left">上/下一标题</td></tr>
+<tr><td class="left">C-c C-b/f</td><td class="left"></td><td class="left">上/下一同级标题</td></tr>
+<tr><td class="left">C-c C-u</td><td class="left"></td><td class="left">上一级标题</td></tr>
+<tr><td class="left">C-c C-j</td><td class="left"></td><td class="left">大纲浏览状态</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2-3" class="outline-4">
+<h4 id="sec-1-2-3">编辑</h4>
+<div class="outline-text-4" id="text-1-2-3">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">快捷键</th><th scope="col" class="left">命令</th><th scope="col" class="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">M-Enter</td><td class="left"></td><td class="left">插入同级标题</td></tr>
+<tr><td class="left">M-Shift-Enter</td><td class="left"></td><td class="left">插入同级TODO标题</td></tr>
+<tr><td class="left">M-Left/Right</td><td class="left"></td><td class="left">将当前标题升/降级</td></tr>
+<tr><td class="left">M-Shift-Left/Right</td><td class="left"></td><td class="left">将子树升/降级</td></tr>
+<tr><td class="left">M-Shift-Up/Down</td><td class="left"></td><td class="left">将子树上/下移</td></tr>
+<tr><td class="left">C-c *</td><td class="left"></td><td class="left">将本行设为标题/正文</td></tr>
+<tr><td class="left">C-c C-w</td><td class="left"></td><td class="left">将子树或区域移到另一标题处(跨缓冲区)</td></tr>
+<tr><td class="left">C-x n s/w</td><td class="left"></td><td class="left">只显示当前子树/返回</td></tr>
+<tr><td class="left">C-c C-x b</td><td class="left"></td><td class="left">在新缓冲区现实当前分支(类C-x n s)</td></tr>
+<tr><td class="left">C-c /</td><td class="left"></td><td class="left">只列出包含搜索结果的大纲,并高亮,支持多种搜索方式</td></tr>
+<tr><td class="left">C-c C-c</td><td class="left"></td><td class="left">取消高亮</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3">显示方式</h3>
+<div class="outline-text-3" id="text-1-3">
+
+<p>默认的大纲现实没有缩进,可以用 M-x org-indent-mode 切换到另一种显示方式.
+若想让某个文件默认使用这种方式打开, 可在文件头部假如:
+</p>
+
+
+<pre class="example"><span class="linenr">1:  </span>#+STARTUP: indent
+</pre>
+
+<p>
+若希望所有org文件都使用这种方式打开, 在 .emacs 中配置:
+</p>
+
+
+<pre class="example"><span class="linenr">1:  </span>(setq org-startup-indented t)
+</pre>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">超链接和图文混排</h2>
+<div class="outline-text-2" id="text-2">
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1">外部链接</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+</div>
+
+<div id="outline-container-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1">自动连接</h4>
+<div class="outline-text-4" id="text-2-1-1">
+
+<p>对于符合链接规则的内容, org-mode会自动将其视为链接(包括文件, 网页, 邮箱, 新闻组, BBDB数据库, IRC会话和记录等).
+对于文件链接, 可以用 :: 后面增加定位符的方式链接到文件的特定位置. 定位符可以是行号或搜索选项. 如:
+</p>
+
+
+<pre class="example"><span class="linenr">1:  </span>file:~/code/main.c::255     进入到目标文件255行
+<span class="linenr">2:  </span>file:~/xx.rog::My Targe     找到目标'&lt;&lt;My Target&gt;&gt;'
+<span class="linenr">3:  </span>file:~/xx.org/::#my-custom-id   查找自定义 id 的项
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-1-2" class="outline-4">
+<h4 id="sec-2-1-2">指定现实链接</h4>
+<div class="outline-text-4" id="text-2-1-2">
+
+
+
+
+<pre class="example"><span class="linenr">1:  </span>[[link][description]]
+<span class="linenr">2:  </span>[[link]]
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-1-3" class="outline-4">
+<h4 id="sec-2-1-3">快捷键</h4>
+<div class="outline-text-4" id="text-2-1-3">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">快捷键</th><th scope="col" class="left">命令</th><th scope="col" class="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">C-c C-l</td><td class="left">org-insert-link</td><td class="left">创建或修改链接,可以引用已保存的链接</td></tr>
+<tr><td class="left">C-c l</td><td class="left"></td><td class="left">保存链接</td></tr>
+<tr><td class="left">C-c C-o</td><td class="left">org-open-at-point</td><td class="left">打开链接</td></tr>
+<tr><td class="left">C-c %</td><td class="left"></td><td class="left">记录内部链接地址</td></tr>
+<tr><td class="left">C-c &amp;</td><td class="left"></td><td class="left">跳转到已记录的内部链接</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2">内部链接</h3>
+<div class="outline-text-3" id="text-2-2">
+
+<p>建立内部链接:
+</p>
+
+
+<pre class="example"><span class="linenr">1:  </span>定义锚点 #&lt;&lt;my-anchor&gt;&gt;
+<span class="linenr">2:  </span>[[my-anchor][内部链接]]
+</pre>
+
+<p>
+脚注可以看作是一种特殊的内部链接, 但要求有"fn: "前缀:
+</p>
+
+
+<pre class="example"><span class="linenr">1:  </span>添加脚注链接 [[fn: footpring][脚注1]]
+<span class="linenr">2:  </span>定义脚注 [fn: footpring1]
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3">显示图片</h3>
+<div class="outline-text-3" id="text-2-3">
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">标记</h2>
+<div class="outline-text-2" id="text-3">
+
+
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1">字体</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+
+
+<pre class="example"><span class="linenr">1:  </span>*粗体*
+<span class="linenr">2:  </span>/斜体/
+<span class="linenr">3:  </span>+删除线+
+<span class="linenr">4:  </span>_下划线_
+<span class="linenr">5:  </span>下标: H_2O
+<span class="linenr">6:  </span>上标: E=mc^2
+<span class="linenr">7:  </span>等宽字: =git= 或者 ~git~
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2">表格</h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+</div>
+
+<div id="outline-container-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1">创建表格</h4>
+<div class="outline-text-4" id="text-3-2-1">
+
+<p>使用|创建.
+</p><table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">快捷键</th><th scope="col" class="left">命令</th><th scope="col" class="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">C-c 竖线</td><td class="left"></td><td class="left">穿件或转换成表格</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2">调整和区域移动</h4>
+<div class="outline-text-4" id="text-3-2-2">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">快捷键</th><th scope="col" class="left">命令</th><th scope="col" class="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">C-c C-c</td><td class="left"></td><td class="left">调整表格, 不移动光标</td></tr>
+<tr><td class="left">TAB</td><td class="left"></td><td class="left">移动到下一区域, 必要时创建新行</td></tr>
+<tr><td class="left">Shift-TAB</td><td class="left"></td><td class="left">移动到上一区域</td></tr>
+<tr><td class="left">Enter</td><td class="left"></td><td class="left">移动到下一行,  必要时创建新行</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2-3" class="outline-4">
+<h4 id="sec-3-2-3">编辑行和列</h4>
+<div class="outline-text-4" id="text-3-2-3">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">快捷键</th><th scope="col" class="left">命令</th><th scope="col" class="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">M-Left/Right</td><td class="left"></td><td class="left">移动列</td></tr>
+<tr><td class="left">M-Up/Down</td><td class="left"></td><td class="left">移动行</td></tr>
+<tr><td class="left">M-Shift-Left/Right</td><td class="left"></td><td class="left">删除/插入列</td></tr>
+<tr><td class="left">M-Shift-Up/Down</td><td class="left"></td><td class="left">删除/插入</td></tr>
+<tr><td class="left">C-c -</td><td class="left"></td><td class="left">添加水平分隔线</td></tr>
+<tr><td class="left">C-c Enter</td><td class="left"></td><td class="left">添加水平分隔线并跳到下一行</td></tr>
+<tr><td class="left">C-c ^</td><td class="left"></td><td class="left">根据当前排列, 可以选择排序方式</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3-3" class="outline-3">
+<h3 id="sec-3-3">段落</h3>
+<div class="outline-text-3" id="text-3-3">
+
+<p>单个回车换行的文本, 认为属于一个段落. 在导出时会转化为不换行的通一短.
+新段要留出一个空行.
+</p></div>
+
+</div>
+
+<div id="outline-container-3-4" class="outline-3">
+<h3 id="sec-3-4">列表</h3>
+<div class="outline-text-3" id="text-3-4">
+
+<ul>
+<li>无序列表以"-", "+"或者"*"开头.
+</li>
+<li>有序列表以"1."或者"1)"开头.
+</li>
+<li>描述别彪用"::"将项和描述分开.
+</li>
+<li>有序列表和无序列表都以缩进表示层级. 只要对齐缩进, 不管是换行还是分块都认为是出于当前列表项.
+</li>
+</ul>
+
+
+</div>
+
+<div id="outline-container-3-4-1" class="outline-4">
+<h4 id="sec-3-4-1">列表操作快捷键</h4>
+<div class="outline-text-4" id="text-3-4-1">
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">快捷键</th><th scope="col" class="left">命令</th><th scope="col" class="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">TAB</td><td class="left"></td><td class="left">折叠列表项</td></tr>
+<tr><td class="left">M-Enter</td><td class="left"></td><td class="left">插入项</td></tr>
+<tr><td class="left">M-Shift-Enter</td><td class="left"></td><td class="left">插入带复选框的项</td></tr>
+<tr><td class="left">M-Shift-Up/Down</td><td class="left"></td><td class="left">移动列表项</td></tr>
+<tr><td class="left">M-Left/Right</td><td class="left"></td><td class="left">升/降级列表项, 不包括子项</td></tr>
+<tr><td class="left">M-Shift-Left/Right</td><td class="left"></td><td class="left">升/降级列表项, 包括子项</td></tr>
+<tr><td class="left">C-c C-c</td><td class="left"></td><td class="left">改变复选框状态</td></tr>
+<tr><td class="left">C-c -</td><td class="left"></td><td class="left">更换列表标记(循环切换)</td></tr>
+</tbody>
+</table>
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3-5" class="outline-3">
+<h3 id="sec-3-5">分隔线</h3>
+<div class="outline-text-3" id="text-3-5">
+
+<p>五条或以上短线视为分隔线: -----
+</p></div>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">标签</h2>
+<div class="outline-text-2" id="text-4">
+
+<p>通常使用tag+category来管理信息.
+</p>
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1">标记tag</h3>
+<div class="outline-text-3" id="text-4-1">
+
+<p>org-mode中, 可以对标题增加tag标记. 格式:
+</p>
+
+
+<pre class="example"><span class="linenr">1:  </span>标题一     :tag1:tag2:tag3:
+</pre>
+
+<p>
+子标题会继承父标题的tag.
+若希望文档中所有的标题都具有某些标签, 只要定义文档元数据:
+</p>
+
+
+<pre class="example">#+FILETAGS: :Peter:Boss:Secret:
+</pre>
+
+<p>
+正文部分可以使用 C-c C-q 或直接在标题上用 C-c C-c 创建标签.
+</p></div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2">预定义tag</h3>
+<div class="outline-text-3" id="text-4-2">
+
+</div>
+
+</div>
+
+<div id="outline-container-4-3" class="outline-3">
+<h3 id="sec-4-3">按tag搜索</h3>
+<div class="outline-text-3" id="text-4-3">
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">导出和发布</h2>
+<div class="outline-text-2" id="text-5">
+
+<p>可以到处多种格式(包括txt, HTML, PDF, iCalendar等).
+</p>
+</div>
+
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1">元数据</h3>
+<div class="outline-text-3" id="text-5-1">
+
+
+</div>
+
+<div id="outline-container-5-1-1" class="outline-4">
+<h4 id="sec-5-1-1"><span class="done DONE">DONE</span> 文档元数据</h4>
+<div class="outline-text-4" id="text-5-1-1">
+
+
+
+
+<pre class="example">#+TITLE:      文档标题(默认是缓冲区名字)
+#+AUTHOR:     作者(默认是 user-full-name)
+#+DATA:       日期
+#+EMASIL:     电子邮箱地址(默认是 user-mail-address)
+#+DESCRIPTION:页面描述
+#+KEYWORDS:   页面的关键字
+#+LANGUAGE:   HTML的语言(默认为英语 org-export-default-language)
+#+TEXT:
+#+OPTIONS:    一些设置
+#+BIND:       
+#+LINK_UP     UP:链接
+#+LINK_HOME   Home:接链
+#+LATEX_HEADER
+#+EXPORT_SELECT_TAGS
+#+EXPORT_EXCLUDE_TAGS
+#+XSLT:
+</pre>
+
+<p>
+其中#+OPTIONS时复合选项, 包括:
+</p>
+
+
+<pre class="example">H:          标题层数
+num:        章节(标题)是否自动编号
+toc:        是否生成索引, 索引到层数
+\n:
+@:
+::
+|:
+^:
+-:
+f:
+todo:
+tasks:
+pri:
+tags:
+&lt;:
+*:
+TeX:
+LaTeX:
+skip:
+author:
+email:
+creator:     是否生成"creat by emacs..."提示
+timestamp:
+d:
+</pre>
+
+</div>
+</div>
+</div>
+</div>

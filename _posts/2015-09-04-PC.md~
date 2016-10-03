@@ -1,0 +1,59 @@
+---
+layout: post
+title: 装机中的一些问题
+categories: [装机]
+comments: true
+---
+
+系统
+===
+一开始的预想: OS X YOSEMITY + WIN 7 X64.
+遇到的问题: 使用变色龙引导卡在IOBluetoothDevice, 无法解决. 换成clover后无法进入引导界面, 不会配置config.plist. 改用UniBeast后依然卡在IOBluetoothDevice, 应该是显卡问题. 可能是gtx950需要一些特殊配置, google gtx950+黑苹果, 无果, 遂放弃.
+
+现在使用系统: Ubuntu 14.04 + WIN 7 X64
+
+分区
+===
+由于SSD只有128GB空间, 另有一希捷1TB(STD1000M003), 同时要装两个系统, 需要好好规划一下分区.
+     SSD: efi              256MB                       /dev/sda1         (hd0,1)
+          mbr              128MB                                         (hd0,2)
+          windows          80.5GB                      /dev/sda3
+          /                20GB                        /dev/sda4
+          /boot            256MB                       /dev/sda5
+          /var             7.9GB                       /dev/sda6
+          /tmp             4.0GB                       /dev/sda8
+          /opt             2.0GB                       /dev/sda9
+          /srv             3.7GB                       /dev/sda10
+    希捷: /winfile        570.2GB                     /dev/sdb2
+          /home           201.5GB                     /dev/sdb3
+          /usr            118.4GB                     /dev/sdb4
+          /usr/local      102.9GB                     /dev/sdb5
+
+使用emacs时遇到了问题, 不用sudo启动emacs时, 可以正常使用fcitx输入汉字, 但是有个问题...没有读写笔记目录的权限...悲剧啊...
+如果用sudo启动emacs, 又无法输入汉字, 已经试过将C-SPC屏蔽`(global-set-key (kdb "C-SPC" 'nil)`, sudo启动emacs会提示C-SPC is undefined. 也试过将su的LC-CTYPE设置成zh_CH.UTF-8, 出现一个问题是可以输入中文, 但不是使用fcitx. 暂时没有找到好的解决方法.
+用回`sudo emacs -nw`. 过程中学到查看环境变量的方法`echo $LC-CTYPE`.
+
+使用中发现在高速下载中会有卡顿, 一开始怀疑硬盘缓存太小(开始使用移动硬盘, 估计缓存只有16M), 换成STD1000M003之后好了很多, 但是还有一点卡, 可能时BIOS问题, 后期准备升一下BIOS.
+
+ubuntu安装显卡驱动: 下载好的驱动无法直接执行, 需要退出X界面, 在命令行模式下执行.
+
+1. 在/etc/modprobe.d下创建名为disable-nouveau.conf的文件, 内容为
+
+    blacklist nouveau
+    options nouveau modeset=0
+
+执行: sudo update-initramfs -u使其生效
+
+2. 配置/kernel以text模式启动, 修改/etc/default/grub文件:
+
+    GRUB_CMDLINE_LINUX_DEFAULT = "quiet splash" => "quietsplash text"
+    GRUB_CMDLINE_LINUX = "" => "rdblacklist=nouveau.modeset=0"
+
+执行: sudo update-grub使修改生效
+
+3. 重启计算机后进入命令行模式, 执行
+
+    sh NVIDIA_XXX.run
+
+
+4. 将grub文件改回, update生效后重启可以进入X界面, 两台显示器可以一起工作咯^_^
