@@ -1,19 +1,37 @@
 ---
 layout: post
 title: ruby元编程
-categories: [ruby, meta programming]
-comments: true
+subtitle: "\ruby元编程笔记\"
+date: 2015-09-20 08:00:00
+author: "Nam"
+header-img: "img/post-bg-2015.jpg"
+tags:
+    - 笔记
 ---
 
-实例变量, 方法, 类
+>"Metaprogramming is comming. "
+
+
+
+目录目录目录
 ===
 
-对象的实例变量及方法
+[C1实例变量, 方法和类](#C1)
+    [S1.1对象的实例变量及方法](#S1.1)
+    [S1.2类](#S1.2)
+
+<p id="C1"></p>
+C1实例变量, 方法和类
+===
+
+<p id="S1.1"></p>
+S1.1对象的实例变量及方法
 ==
 
 实例变量(Instance Variables)指使用时才会被建立的对象, 即使是同一类的实例, 也可以有不同的实例变量.
 一个对象(实例)只是存储了它的实例变量和其所属类的引用. 一个对象的实例变量仅存储在对象中, 方法(实例方法Instance Methods)则存在于对象所属的类中. 同一个类的实例都共享类中的方法, 不共享实例变量.
 
+<p id="S1.2"></p>
 类
 ==
 
@@ -63,7 +81,7 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
         "geek"
       end
     end
-    
+
     # 2
     class Rubyist
       class << self
@@ -72,14 +90,14 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
         end
       end
     end
-    
+
     # 3
     class Rubyist
     end
     def Rubyist.who
       "gEek"
     end
-    
+
     # 4
     class Rubyist
     end
@@ -88,7 +106,7 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
         "geEk"
       end
     end
-    
+
     # 5
     class << Rubyist
       def who
@@ -127,7 +145,7 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
         'Ruby programming'
       end
     end
-    
+
     an_object = Rubyist.new
     puts an_object.class # => Rubyist
     puts an_object.class.instance_methods(false) # => what_does_he_do
@@ -150,7 +168,7 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
         "Welcome " + args.join(' ')
       end
     end
-    
+
     obj = Rubyist.new
     puts(obj.send(:welcome, "famous", "Rubyists")) # => Welcome famous Rubyists
 
@@ -158,7 +176,7 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
 
     class Rubyist
     end
-    
+
     rubyist = Rubyist.new
     if rubyist.respond_to?(:also_railist)
       puts rubyist.send(:also_railist)
@@ -174,7 +192,7 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
           "#{name} rocks!!"
         end
     end
-    
+
     obj = Rubyist.new
     puts obj.send(:say_hello, 'Matz')
 
@@ -185,7 +203,7 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
         my_arg
       end
     end
-    
+
     boj = Rubyist.new
     puts(obj.hello('Matz')) # => Matz
 
@@ -208,12 +226,12 @@ ihower在Ruby Conf China 2010上的讲义<<如何设计出漂亮的Ruby API>>中
     # go to shanghai
     car.go_to_japan
     #go to japan
-    
+
     class Car
       def go(place)
         puts "go to #{place}"
       end
-      
+
       def method_missing(name, *args)
         if name.to_s =~ /^go_to_(.*)/
           go($1)
@@ -229,26 +247,26 @@ ihower在Ruby Conf China 2010上的讲义<<如何设计出漂亮的Ruby API>>中
       def method_missing(m, *args, &block)
         puts "Method Missing: Called #{m} with #{args.inspect} and #{block}"
       end
-      
+
       def hello
         puts "Hello for class Rubyist"
       end
     end
-    
+
     class IndianRubyist < Rubyist
       def hello
         puts "Hello form class IndianRubyist"
       end
     end
-    
+
     obj = IndianRubyist.new
     obj.hello #=> Hello form class IndianRubyist
-    
+
     class IndianRubyist
       remove_method :hello # removed form IndianRubyist, but still in Rubyist
     end
     obj.hello # => Hello form class Rubyist
-    
+
     class IndianRubyist
       undef_method :hello # prevent any calls to 'hello'
     end
@@ -264,18 +282,18 @@ ihower在Ruby Conf China 2010上的讲义<<如何设计出漂亮的Ruby API>>中
 关于`eval`方法的安全性漏洞, Programing Ruby中给出了一个例子.
 
     require 'cgi'
-    
+
     cgi = CGI::new("html4")
-    
+
     # Fetch the value of the form field "expression"
     expr = cgi["expression"].to_s
-    
+
     begin
       result = eval(expr)
     rescue Exception => detail
     # handle bad expressions
     end
-    
+
     # display result back to user...
 
 然后一个来自Waxahachie的12岁小孩在表单中输入了`system('rm')`, 系统中的文件全部消失了.
@@ -290,9 +308,9 @@ Object类提供了一个名为`instance_eval`的公开方法, 可被一个实例
       end
     end
     obj = Rubyist.new
-    
+
     #instance_eval可以操纵obj的私有方法及实例变量
-    
+
     obj.instance_eval do
       puts self # => #<Rubyist:0x2ef83d0>
       puts @geek 3 => Matz
@@ -302,13 +320,13 @@ Object类提供了一个名为`instance_eval`的公开方法, 可被一个实例
 
     class Rubyist
     end
-    
+
     Rubyist.instance_eval do
       def who
         "Geek"
       end
     end
-    
+
     puts Rubyist.who # => Geek
 
 方法`module_eval`和`class_eval`用于模块和类, 而不是对象, 两种方法功能相同, 可以用于从外部检索类变量.
@@ -335,7 +353,7 @@ Object类提供了一个名为`instance_eval`的公开方法, 可被一个实例
     class Rubyist
       @@geek = "Ruby's Matz"
     end
-    
+
     Rubyist.class_variable_set(:@@geek, 'Matz rocks!')
     puts Rubyist.class_variable_get(:@@geek) # => Matz rocks!
 
@@ -345,7 +363,7 @@ Object类提供了一个名为`instance_eval`的公开方法, 可被一个实例
       @@geek = "Ruby's Matz"
       @@country = "USA"
     end
-    
+
     class Child < Rubyist
       @@city = "Nashville"
     end
@@ -400,4 +418,3 @@ Object类提供了一个名为`instance_eval`的公开方法, 可被一个实例
     end
     obj = class_name.new
     puts obj.who('Matz') # => Matz
-
