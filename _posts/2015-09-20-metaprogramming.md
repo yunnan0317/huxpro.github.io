@@ -13,66 +13,81 @@ tags:
 
 
 
-**我是目录**
-===
-
-- [C1实例变量, 方法和类](#C1)
-    - [S1.1对象的实例变量及方法](#S1.1)
-    - [S1.2类](#S1.2)
+# **我是目录**
 
 
+- [C1 实例变量, 方法和类](#C1)
+    - [S1.1 对象的实例变量及方法](#S1.1)
+    - [S1.2 类](#S1.2)
+    - [S1.3 类是开放的](#S1.3)
+    - [S1.4 多重initialize方法](#S1.4)
+    - [S1.5 匿名类](#S1.5)
 
 <p id="C1"></p>
 
-C1实例变量, 方法和类
-===
+# C1 实例变量, 方法和类
 
-<p id="s1.1"></p>
 
-S1.1对象的实例变量及方法
-==
+<p id="S1.1"></p>
+
+## S1.1 对象的实例变量及方法
+
 
 实例变量(Instance Variables)指使用时才会被建立的对象, 即使是同一类的实例, 也可以有不同的实例变量.
 一个对象(实例)只是存储了它的实例变量和其所属类的引用. 一个对象的实例变量仅存储在对象中, 方法(实例方法Instance Methods)则存在于对象所属的类中. 同一个类的实例都共享类中的方法, 不共享实例变量.
 
-类
-==
+
+<p id="S1.2"></p>
+
+## S1.2 类
+
 
 * 类是对象. 所有能应用与对象的皆可应用于类. Class类就是Class类的实例.
 
 * 所有类的祖先是Object类, Object类继承自BasicObject.
 
-    #对象的方法即为其所属类的实例方法
-    1.methods == 1.class.instance_methods
-    #=> true
+``` ruby
+#对象的方法即为其所属类的实例方法
+1.methods == 1.class.instance_methods
+#=> true
 
-类是开放的
-==
+```
+
+<p id="S1.1"></p>
+
+## S1.3 类是开放的
+
 
 可以重新定义类, 甚至标准类(Ruby2.0引入了`refine`来限定这种打开类的作用域).
 
-多重initialize方法
-==
+<p id="S1.4"></p>
+
+## S1.4 多重initialize方法
+
 
 类的*重载(Overloading)*: 函数或者方法有同样的名称, 但参数列表不同.
 
-    # 定义矩形的类, 初始化函数initialize可以接受两种形式的参数:
-    #   Rectangle.new([x_top, y_left], length, width)
-    #   Rectangle.new([x_top, y_left], [x_bottom, y_right])
-    class Rectangle
-      def initialize(*args)
+``` ruby
+# 定义矩形的类, 初始化函数initialize可以接受两种形式的参数:
+#   Rectangle.new([x_top, y_left], length, width)
+#   Rectangle.new([x_top, y_left], [x_bottom, y_right])
+class Rectangle
+    def initialize(*args)
         if args.size<2 || args,siza>3
-          puts "Sorry. This method takes either 2 or 3 arguments."
+            puts "Sorry. This method takes either 2 or 3 arguments."
         else
-          puts "Correct number of arguments"
+            puts "Correct number of arguments"
         end
-      end
     end
-    Rectangle.new([10, 23], 4, 10)
-    Rectangle.new([10, 23], [14, 13])
+end
+Rectangle.new([10, 23], 4, 10)
+Rectangle.new([10, 23], [14, 13])
+```
 
-匿名类
-==
+<p id="S1.5"></p>
+
+## S1.5 匿名类
+
 
 匿名类(Anonymous Class) == 单例类(Singleton Class) == 特征类(Eigenclass) == 鬼魂类(Ghost Class) == 元素(Metaclass) == uniclass
 
