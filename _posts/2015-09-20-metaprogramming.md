@@ -11,7 +11,7 @@ tags:
 
 >"这篇文章是deathking的blog中关于元编程的笔记"
 
-[原文地址]([http://deathking.github.io/metaprogramming-in-ruby/chapter04.html](http://deathking.github.io/metaprogramming-in-ruby/chapter04.html)
+[原文地址](http://deathking.github.io/metaprogramming-in-ruby/chapter04.html)
 
 
 
