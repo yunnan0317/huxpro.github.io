@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "ruby元编程"
-subtitle: " \"Hello world, Hello blog\""
+subtitle: " \"META\""
 date: 2015-09-20 08:00:00
 author: "Nam"
 header-img: "img/post-bg-2015.jpg"
@@ -9,7 +9,9 @@ tags:
     - 笔记
 ---
 
->"Metaprogramming is comming. "
+>"这篇文章是deathking的blog中关于元编程的笔记"
+
+[原文地址]([http://deathking.github.io/metaprogramming-in-ruby/chapter04.html](http://deathking.github.io/metaprogramming-in-ruby/chapter04.html)
 
 
 
@@ -29,8 +31,14 @@ tags:
 
 - [C3 实用元编程方法](#C3)
 
-    -[S3.1 反射, 内省](#S3.1)
-
+    - [S3.1 反射, 内省](#S3.1)
+    - [S3.2 send](#S3.2)
+    - [S3.3 define_method](#S3.3)
+    - [S3.4 remove_method和undef_method](#S3.4)
+    - [S3.5 eval](#S3.5)
+    - [S3.6 instance_eval, module_eval, class_eval](#S3.6)
+        - [L3.6.1 instance_eval](#L3.6.1)
+        - [L3.6.2 module_eval和class_eval](#L3.6.2)
 
 <p id=""></p>
 
@@ -203,6 +211,9 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
     end
 ```
 
+<p id="S3.2"></p>
+
+## S3.2 send
 
 `send`方法是`Object`类的实例方法, 它的第一个参数是期望执行的方法的名称, 其余参数会直接传递给该方法.
 
@@ -250,6 +261,9 @@ ruby中每个对象都有自己的匿名类, 这个类能拥有方法, 但是只
 
 ```
 
+<p id="S3.3"></p>
+
+## S3.3 define_method
 
 `Module#define_method`是Moudule类实例的私有方法, 因此仅能由类或者模块使用. 可以在receiver中使用该方法动态的定义实例方法, 只需要传递方法的名字, 及一个代码块.
 
@@ -306,6 +320,9 @@ ihower在Ruby Conf China 2010上的讲义<<如何设计出漂亮的Ruby API>>中
     end
 ```
 
+<p id="S3.4"></p>
+
+## S3.4 remove_method和undef_method
 
 想要移除已经存在的方法, 可以在打开的类的作用域(scope)中使用`remove_method`方法, 但是祖先链中的同名方法不会被移除. 而`undef_method`则会阻止任何对指定方法的访问, 无论是所属类中的方法还是祖先链中的同名方法.
 
@@ -341,6 +358,9 @@ ihower在Ruby Conf China 2010上的讲义<<如何设计出漂亮的Ruby API>>中
 
 ```
 
+<p id="S3.5"></p>
+
+## S3.5 eval
 
 `Kernel`模块提供了一个叫做`eval`的方法, 该方法用于执行一个用字符串表示的代码. `eval`方法是在万般无奈下的选择.
 1. 避免外部u树局通过`eval`传递.
@@ -376,7 +396,15 @@ ihower在Ruby Conf China 2010上的讲义<<如何设计出漂亮的Ruby API>>中
 
 然后一个来自Waxahachie的12岁小孩在表单中输入了`system('rm')`, 系统中的文件全部消失了.
 
+<p id="S3.6"></p>
+
+## S3.6 instance_eval, module_eval, class_eval
+
 `instance_eval`, `module_eval`和`class_eval`是`eval`方法的特殊形式.
+
+<p id="L3.6.1"></p>
+
+### L3.6.1 instance_eval
 
 Object类提供了一个名为`instance_eval`的公开方法, 可被一个实例调用. 提供了操作对象实例变量的途径. 可以使用字符串向此方法传递参数, 也可以传递一个代码块.
 
@@ -413,6 +441,9 @@ Object类提供了一个名为`instance_eval`的公开方法, 可被一个实例
 
 ```
 
+<p id="L3.6.2"></p>
+
+### L3.6.2 module_eval和class_eval
 
 方法`module_eval`和`class_eval`用于模块和类, 而不是对象, 两种方法功能相同, 可以用于从外部检索类变量.
 
