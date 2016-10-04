@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ruby元编程
+title: "ruby元编程"
 subtitle: "\ruby元编程笔记\"
 date: 2015-09-20 08:00:00
 author: "Nam"
