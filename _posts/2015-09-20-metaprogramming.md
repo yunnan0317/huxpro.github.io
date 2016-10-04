@@ -10,7 +10,6 @@ tags:
 ---
 
 >"这篇文章是deathking的blog中关于元编程的笔记"
-
 [原文地址](http://deathking.github.io/metaprogramming-in-ruby/chapter04.html)
 
 
@@ -51,17 +50,37 @@ tags:
 
 ## S1.1 对象的实例变量及方法
 
+通常意义下一个对象总是一个类的实例化, 可以有方法和实例变量.
 
-实例变量(Instance Variables)指使用时才会被建立的对象, 即使是同一类的实例, 也可以有不同的实例变量.
-一个对象(实例)只是存储了它的实例变量和其所属类的引用. 一个对象的实例变量仅存储在对象中, 方法(实例方法Instance Methods)则存在于对象所属的类中. 同一个类的实例都共享类中的方法, 不共享实例变量.
-n
+一个对象的instance variables指使用时才会被建立的, 即使是同一类的实例, 也可以有不同的实例变量. 可以调用Object#instance_variables()查看对象所属的实例变量.
+
+不同的是, 同一类的所有实例都可以调用类中定义的方法. 可以调用Object#methods()查看对象的方法列表, 其中包括继承的方法.
+
+一个对象的instance varibales仅存储在对象中, 事实上这个对象(类的实例)只是存储了它的instance varibales和其所属类的引用.
+
+类中定义的方法(上文提到的对象的方法)实际是类的instance methods, 和对象的instance variables类似, 是定义在类中的.
+
+同一个类的实例都共享类中的方法, 不共享实例变量.
 
 <p id="S1.2"></p>
 
 ## S1.2 类
 
+* <Ruby元编程>中Ruby的class关键字更像是一个作用于操作符, 核心任务是把你带到类的上下文中.
 
-* 类是对象. 所有能应用与对象的皆可应用于类. Class类就是Class类的实例.
+* Class#class方法表示实例与类的关系
+
+* Class#superclass方法表示类之间的继承关系
+
+* 类是对象. 所有能应用与对象的皆可应用于类. 类就是Class类的实例.
+
+* 类方法就是Class类的实例方法
+
+``` ruby
+"hello".class # => String
+String.clsss # => Class
+
+```
 
 * 所有类的祖先是Object类, Object类继承自BasicObject.
 
