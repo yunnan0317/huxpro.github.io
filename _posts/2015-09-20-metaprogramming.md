@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "ruby元编程"
+subtitle: " \"Hello world, Hello blog\""
 date: 2015-09-20 08:00:00
 author: "Nam"
 header-img: "img/post-bg-2015.jpg"
