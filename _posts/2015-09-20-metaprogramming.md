@@ -1,12 +1,11 @@
 ---
 layout: post
 title: "ruby元编程"
-#subtitle: "\ruby元编程笔记\"
-# date: 2015-09-20 08:00:00
-# author: "Nam"
-# header-img: "img/post-bg-2015.jpg"
-#tags:
-#    - 笔记
+date: 2015-09-20 08:00:00
+author: "Nam"
+header-img: "img/post-bg-2015.jpg"
+tags:
+    - 笔记
 ---
 
 >"Metaprogramming is comming. "
@@ -19,6 +18,8 @@ title: "ruby元编程"
 [C1实例变量, 方法和类](#C1)
     [S1.1对象的实例变量及方法](#S1.1)
     [S1.2类](#S1.2)
+
+
 
 <p id="C1"></p>
 C1实例变量, 方法和类
