@@ -40,3 +40,5 @@ tags:
     (setq prelude-flyspell nil)
 
     ;;; custom.el ends here
+
+整理以前的笔记时需要对代码块整体左移调整缩进, 使用C-c <.
