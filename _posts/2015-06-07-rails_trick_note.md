@@ -6,7 +6,7 @@ author: "Nam"
 header-img: "img/post-bg-2015.jpg"
 tags:
     - 笔记
-    - Ruby ond Rails
+    - Ruby on Rails
 ---
 
 用户注册
