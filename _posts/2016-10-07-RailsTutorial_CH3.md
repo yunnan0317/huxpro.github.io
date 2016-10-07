@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "RailsTutorial笔记(一)"
-subtitle: " \"Chapter 3 基本静态的页面 \""
+
 date: 2016-10-06 08:00:00
 author: "Nam"
 header-img: "img/post-bg-2015.jpg
