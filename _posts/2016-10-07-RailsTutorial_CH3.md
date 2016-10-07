@@ -9,7 +9,8 @@ tags:
     - 笔记
     - Ruby on Rails
 ---
-# -*- coding: utf-8 -*-
+
+
 # 3.1 创建演示应用
 
 1. 创建新引用
