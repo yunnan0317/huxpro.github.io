@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ubuntu在即
+title: "ubuntu杂记"
 date: 2016-10-07 08:00:00
 author: "Nam"
 header-img: "img/post-bg-2015.jpg"
