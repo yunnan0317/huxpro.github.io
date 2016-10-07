@@ -1,8 +1,12 @@
 ---
 layout: post
 title: rails技巧笔记
-categories:  [rails, ruby, web]
-comments: true
+date: 2015-06-07 08:00:00
+author: "Nam"
+header-img: "img/post-bg-2015.jpg"
+tags:
+    - 笔记
+    - Ruby ond Rails
 ---
 
 用户注册

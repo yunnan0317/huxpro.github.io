@@ -2,11 +2,12 @@
 layout: post
 title: "ruby元编程中的core"
 subtitle: " \"META\""
-date: 2015-10-06 08:00:00
+date: 2016-10-06 08:00:00
 author: "Nam"
 header-img: "img/post-bg-2015.jpg"
 tags:
     - 笔记
+    - ruby
 ---
 
 >"这篇文章是<<ruby元编程>>笔记
