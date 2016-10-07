@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "RailsTutorial笔记(一)"
-
-date: 2016-10-06 08:00:00
+title: Rails Tutorial笔记(一)
+subtitle: "/"Chapter 3 基本静态的页面/""
+date: 2016-10-07 22:00:00
 author: "Nam"
-header-img: "img/post-bg-2015.jpg
+header-img: "img/post-bg-2015.jpg"
 tags:
     - 笔记
     - Ruby on Rails
