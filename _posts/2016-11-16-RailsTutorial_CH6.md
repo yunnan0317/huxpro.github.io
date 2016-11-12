@@ -492,7 +492,8 @@ _代码清单6.30: 没有内容的fixtrue test/firxtures/users.yml_
 有些数据库适配器的索引区分大小写, 为了保证电子邮件的唯一性, 统一使用小写形式, 使用"回调"(callback, 在Active Record对象生命周期的特定时刻调用), 我们此刻要用的是before_save(初步实现, 8.4会使用常用的"方法引用"定义回调).
 
 
-_代码清单6.31: 把email属性的值转换为消协, 确保邮件地址唯一 /app/models/user.rb_
+_代码清单6.31: 把email属性的值转换为小写, 确保邮件地址唯一 /app/models/user.rb_
+
 ``` ruby
 class User < ActiveRecord::Base
   before_save { self.email = self.email.downcase }
