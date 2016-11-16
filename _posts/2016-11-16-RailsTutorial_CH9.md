@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Rails Tutorial笔记(四)"
+title: "Rails Tutorial笔记(七)"
 subtitle: " \"Chapter 9 \" "
 date: 2016-11-16 21:13:00
 author: "Nam"
