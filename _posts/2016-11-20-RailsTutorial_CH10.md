@@ -320,7 +320,7 @@ http://www.example.com/account_activations/[activation_token]/edit
 account_activations/[activation_token]/edit?email=foo%40example.com
 ```
 
-email中的@符号被转移了, 这样URL才是有效的. 在Rails中定义query parameter的方法是把一个hash传递给具名路由:
+email中的@符号被转义了, 这样URL才是有效的. 在Rails中定义query parameter的方法是把一个hash传递给具名路由:
 
 ``` ruby
 edit_account_action_url(@user.activation_token, email: @user.email)
@@ -710,32 +710,39 @@ end
 
 _代码清单10.28: 禁止未激活的用户登陆 app/controllers/session\_controller.rb_
 
-    class SessionsController < ApplicationController
-      def new
-      end
-      def create
-        user = User.find_by(email: params[:session][:email].downcase)
-        if user && user.authenticate(params[:session][:password])
-          if user.activated?
-            log_in user
-            params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-            redirect_back_or user
-          else
-            message = "Account not activated"
-            message += "Check your email for the activation link."
-            flash[:warning] = message
-            redirect_to root_url
-          end
-        else
-          flash.now[:danger] = 'Invalid email/password combination'
-          render 'new'
-        end
-      end
-      def destroy
-        log_out if logged_in?
+``` ruby
+class SessionsController < ApplicationController
+
+  def new
+  end
+
+  def create
+    user = User.find_by(email: params[:session][:email].downcase)
+    if user && user.authenticate(params[:session][:password])
+      if user.activated?
+        log_in user
+        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+        redirect_back_or user
+      else
+        message = "Account not activated"
+        message += "Check your email for the activation link."
+        flash[:warning] = message
         redirect_to root_url
       end
+    else
+      flash.now[:danger] = 'Invalid email/password combination'
+      render 'new'
     end
+  end
+
+  def destroy
+    log_out if logged_in?
+    redirect_to root_url
+  end
+end
+
+```
+
 
 ## 10.1.4 测试和重构
 
@@ -743,55 +750,69 @@ _代码清单10.28: 禁止未激活的用户登陆 app/controllers/session\_cont
 
 _代码清单10.29: 在用户注册的测试文件中添加账户激活的测试 test/integration/users\_signup\_test.rb_
 
-    require 'test_helper'
-    class UsersSignupTest < ActionDispatch::IntegrationTest
-      def setup
-        # ActionMailer::Base.deliveries用来存放已发送邮件数目
-        # 提前清空发送数目, 以便后面测试
-        ActionMailer::Base.deliveries.clear
-      end
+``` ruby
+require 'test_helper'
 
-      test "invalid signup information" do
-        get signup_path
-        assert_no_difference 'User.count' do
-          post users_path, user: { name: "",
-                                   email: "user@invalid",
-                                   password: "foo",
-                                   password_confirmation: "bar" }
-        end
-        assert_template 'users/new'
-        assert_select 'div#error_explanation'
-        assert_select 'div.field_with_errors'
-      end
-      test "valid signup information with account activation" do
-        get signup_path
-        assert_difference 'User.count', 1 do
-          post users_path, user: { name: "Example User",
-                                   email: "user@example.com",
-                                   password: "password",
-                                   password_confirmation: "password" }
-        end
-        assert_equal 1, ActionMailer::Base.deliveries.size
-        # assigns用来获取相应动作中的实例变量.
-        user = assigns(:user)
-        assert_not user.activated?
-        # 尝试在激活前登陆
-        log_in_as(user)
-        assert_not is_logged_in?
-        # 激活令牌无效
-        get edit_account_activation_path("invalid token")
-        assert_not is_logged_in?
-        # 令牌有效, 电子邮件无效
-        get edit_account_activation_path(user.activation_token, email: 'wrong')
-        assert_not is_logged_in?
-        # 激活令牌有效
-        get edit_account_activation_path(user.activation_token, email: user.email)
-        assert user.reload.activation?
-        follow_redirect!
-        assert_template 'users/shwo'
-        assert is_logged_in?
-      end
+class UsersSignupTest < ActionDispatch::IntegrationTest
+
+  def setup
+    # ActionMailer::Base.deliveries用来存放已发送邮件数目
+    # 提前清空发送数目, 以便后面测试
+    ActionMailer::Base.deliveries.clear
+  end
+
+  test "invalid signup information" do
+    get signup_path
+    assert_no_difference 'User.count' do
+      post users_path, user: { name: "",
+                               email: "user@invalid",
+                               password: "foo",
+                               password_confirmation: "bar" }
     end
+    assert_template 'users/new'
+    assert_select 'div#error_explanation'
+    assert_select 'div.field_with_errors'
+  end
+
+  test "valid signup information with account activation" do
+    get signup_path
+
+    assert_difference 'User.count', 1 do
+      post users_path, user: { name: "Example User",
+                               email: "user@example.com",
+                               password: "password",
+                               password_confirmation: "password" }
+    end
+
+    assert_equal 1, ActionMailer::Base.deliveries.size
+
+    # assigns用来获取相应动作中的实例变量.
+    user = assigns(:user)
+    assert_not user.activated?
+
+    # 尝试在激活前登陆
+    log_in_as(user)
+    assert_not is_logged_in?
+
+    # 激活令牌无效
+    get edit_account_activation_path("invalid token")
+    assert_not is_logged_in?
+
+    # 令牌有效, 电子邮件无效
+    get edit_account_activation_path(user.activation_token, email: 'wrong')
+    assert_not is_logged_in?
+
+    # 激活令牌有效
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert user.reload.activation?
+    follow_redirect!
+    assert_template 'users/shwo'
+    assert is_logged_in?
+  end
+end
+
+```
+
 
 _代码清单10.30: 测试 略_
 
@@ -799,55 +820,73 @@ _代码清单10.30: 测试 略_
 
 _代码清单10.31: 在用户模型中添加账户激活相关的方法 app/model/user.rb_
 
-    class User < ActiveRecord::Base
-      ...
-      # 激活账户
-      def activate
-        update_attribute(:activated, true)
-        update_attribute(:actvated_at, Time.zone.now)
-      end
+``` ruby
+class User < ActiveRecord::Base
+  .
+  .
+  .
+  # 激活账户
+  def activate
+    update_attribute(:activated, true)
+    update_attribute(:actvated_at, Time.zone.now)
+  end
 
-      # 发送激活邮件
-      def send_activation_email
-        UserMailer.account_activation(self).deliver_now
-      end
+  # 发送激活邮件
+  def send_activation_email
+    UserMailer.account_activation(self).deliver_now
+  end
 
-      private
-      ...
-    end
+  private
+  .
+  .
+  .
+end
+
+```
+
 
 _代码清单10.32: 通过用户模型对象发送邮件 app/controller/users\_controller.rb_
 
-    class UsersController < ApplicationController
-      def create
-        @user = User.new(user_params)
-        if @user.save
-          @user.send_activation_email
-          flash[:info] = "Please check your email to activate your account."
-          redirect_to root_url
-        else
-          render 'new'
-        end
-      end
-      ...
+``` ruby
+class UsersController < ApplicationController
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      @user.send_activation_email
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
+    else
+      render 'new'
     end
+  end
+  .
+  .
+  .
+end
+
+```
+
 
 _代码清单10.33: 通过用户模型对象激活账户 app/controllers/account\_activations\_controller.rb_
 
-    class AccountActivationsController < ApplicationController
-      def edit
-        user = User.find_by(email: params[:email])
-        if user && !user.activated? && user.authenticated?(:activation, params[:id])
-          user.activate
-          log_in user
-          flash[:success] = "Account activated!"
-          redirect_to user
-        else
-          flash[:danger] = "Invalid activation link"
-          redirect_to root_url
-        end
-      end
+
+``` ruby
+class AccountActivationsController < ApplicationController
+  def edit
+    user = User.find_by(email: params[:email])
+    if user && !user.activated? && user.authenticated?(:activation, params[:id])
+      user.activate
+      log_in user
+      flash[:success] = "Account activated!"
+      redirect_to user
+    else
+      flash[:danger] = "Invalid activation link"
+      redirect_to root_url
     end
+  end
+end
+```
+
 
 # 10.2 密码重设
 
