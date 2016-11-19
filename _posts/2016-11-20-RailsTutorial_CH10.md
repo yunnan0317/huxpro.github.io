@@ -18,7 +18,7 @@ tags:
 
 2. 用户注册后, 生成一个activation_token和对应的activation_digest
 
-3. 把activation_digest存储在数据库中(activation_token只是一个临时属性, 不存储在数据库中), 然后发送一个包含activation_token和user email的链接
+3. 把activation_digest存储在数据库中(activation_token只是一个临时属性, 不存储在数据库中), 然后发送给注册email一个包含activation_token和user email的链接
 
 4. 用户点击这个连接后, 使用user email查找用户, 并且对比token和digest.
 
@@ -39,7 +39,7 @@ tags:
 rails generate controller AccountActivations
 ```
 
-我们需要使用下面这个方法生成一个URL, 放在激活邮件中
+我们需要使用下面这个helper生成一个URL 放在激活邮件中
 
 ``` ruby
 edit_account_activation_url(activation_token, ...)
@@ -65,7 +65,7 @@ end
 ```
 
 
-和remember\_me相同, 公开令牌, 在数据库中存储摘要. 这么做可以使用`user.activation_token`获得token, 使用`user.authenticated?(:activation, token)`进行用户认证. 同时还要定义一个返回boolean的方法, 用来检查用户激活状态`if user.activated?`
+和remember\_me相同, activation使用公开令牌, digest是存储在数据库中的. 这么做可以使用`user.activation_token`获得token, 使用`user.authenticated?(:activation, token)`进行用户认证. 同时还要定义一个返回boolean的activated?方法, 用来检查用户激活状态`if user.activated?`
 
 |users||
 |--|--|
@@ -81,13 +81,13 @@ end
 |activated|boolean|
 |activated_at|datetime|
 
-添加需要的三个属性
+根据上述描述, 添加需要的三个属性activation\_digest, activated, activated\_at
 
 ``` shell
 rails generate migration add_activation_to_users activation_digest:string activated:boolean activated_at:datetime
 ```
 
-和admin一样, 需要把activated属性默认设置为false
+和admin一样, 需要把activated属性默认设置为false, 修改迁移文件
 
 _代码清单10.2: 添加账户激活所需属性的迁移 db/migrate/[timestamp]\_add\_activation\_users.rb_
 
@@ -103,17 +103,20 @@ end
 ```
 
 
-执行迁移`bundle exec rake db:migration`
+执行迁移
 
-每个新注册的用户都需要激活, 应该在创建用户对象前分配激活令牌和摘要. 之前在存储email前会使用before\_save回调, 类似的, 可以使用before\_create回调, 按照下面的方式定义:
+``` shell
+bundle exec rake db:migration
+```
+
+
+每个新注册的用户都需要激活, 应该在创建用户对象前分配激活token和digest. 之前在存储email前会使用before\_save回调, 类似的, 可以使用before\_create回调创建digest, 按照下面的方式定义:
 
 ``` ruby
 before_create :create_activation_digest
 ```
 
-
-
-与之前的before\_save调用不同, 上述代码采用方法引用. Rails会自动寻找一个名为create\_activation\_digest的方法, 在创建用户之前调用.  此时before\_create使用的是方法引用, 之前的before\_save直接接受了一个块, 后面会重构. 而create\_activation\_digest方法只会在用户模型中使用, 没有必要公开, 可以用private实现.
+与之前的before\_save调用不同, 之前的before\_save直接接受了一个块(后面会重构).  此时before\_create调用了一个方法(称为方法引用), Rails会自动寻找一个名为create\_activation\_digest的方法, 在创建用户之前调用. 目前create\_activation\_digest方法还没有创建, 并且只会在用户模型中使用, 没有必要公开, 可以创建private方法.
 
 _代码清单10.3: 在用户模型中添加账户激活相关的代码 app/models/user.rb_
 
@@ -124,7 +127,9 @@ class User < ActiveRecord::Migration
   before_save :downcase_email
   before_create :create_activation_digest
   validates :name, presence: true, length: { maximum: 50 }
-  ...
+  .
+  .
+  .
   private
     # 将email地址转换成小写
     def downcase_email
@@ -216,14 +221,14 @@ bundle exec rake db:seed
 
 ## 10.1.2 邮件程序
 
-创建邮件程序, 生成account\_activation和password\_reset方法.
+创建邮件程序, 生成account\_activation和password\_reset(10.2节实现)方法.
 
 ``` shell
 rails generate mailer UserMailer account_activation password_reset
 ```
 
 
-此外还生程了两个视图模板, 一个用于HTML邮件, 另一个用于纯文本文件.
+此外account\_activation方法还生程了两个视图模板, 一个用于HTML邮件, 另一个用于纯文本文件.
 
 _代码清单10.6: 生成的账户激活邮件视图, 纯文本格式 app/views/user\_mailer/account\_activation.text.erb_
 
@@ -379,7 +384,7 @@ host = 'localhost:3000' # 本地主机
 ```
 
 
-重启rails服务器使配置生效. 接下来修改邮件程序的预览文件, 生成邮件时已经自动生成了这个文件.
+重启rails服务器使配置生效. 接下来修改邮件程序的预览文件, 生成邮件程序时已经自动生成了这个文件.
 
 _代码清单10.13: 生成的邮件预览程序 test/mailer/previews/user\_mailer\_preview.rb_
 
@@ -529,7 +534,7 @@ end
 ```
 
 
-现在注册后重新定向到root_url而不是users/show, 并且不会自动登陆, 所以测试不会通过.
+现在注册后重新定向到root_url而不是users/show, 并且不会自动登陆(之前测试覆盖了重定向到用户页面), 所以测试不会通过.
 
 _代码清单10.20: 临时注释掉失败的测试 test/integration/users\_signup\_test.rb_
 
@@ -582,7 +587,7 @@ Date: Wed, 03 Sep 2014 19:47:18 +0000
 ```
 
 
-## 103.1.3 激活账户
+## 10.1.3 激活账户
 
 完成了邮件后, 要编写AccountActivationsController中的edit动作, 激活账户. 上节说过, activation_token和email可以从params[:id]和params[:email]获取. 参照密码和记忆令牌实现方式, 计划这样查找和认证用户:
 
@@ -615,6 +620,7 @@ class User < ActiveRecord::Base
   .
   # 如果指定的令牌和摘要匹配, 返回true
   def autheticated?(attribute, token)
+    # 动态派发
     digest = send("#{attribute}_digest")
     return false if digest.nil?
     BCrypt::Password.new(digest).is_password?(token)
@@ -631,7 +637,7 @@ _代码清单10.23: 测试 略_
 
 测试失败, 原因是remember_me还是使用以前的authenticated?方法.
 
-_代码清单10.24: 在current\_user中使用修改后的authenticated?发放 app/helpers/session\_helper.rb_
+_代码清单10.24: 在current\_user中使用修改后的authenticated?方法 app/helpers/session\_helper.rb_
 
 ``` ruby
 module SessionsHelper
