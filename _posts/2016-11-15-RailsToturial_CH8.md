@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rails Tutorial笔记(六)"
-subtitle: " \"Chapter 8  \" "
+subtitle: " \"Chapter 8 登录\\退出\" "
 date: 2016-11-15 19:52:00
 author: "Nam"
 header-img: "img/post-bg-2015.jpg"

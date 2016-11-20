@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rails Tutorial笔记(四)"
-subtitle: " \"Chapter 6 \" "
+subtitle: " \"Chapter 6 用户模型\" "
 date: 2016-11-11 17:50:00
 author: "Nam"
 header-img: "img/post-bg-2015.jpg"
