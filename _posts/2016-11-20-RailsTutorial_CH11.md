@@ -1442,8 +1442,8 @@ end
 * 和用户一样, 微博也是一种资源, 而且有对应的ActiveRecord模型;
 * Rails支持多键索引;
 * 我们可以分别在用户和微博模型中使用has\_many和belongs\_to方法实现一个用户有多篇微博的模型;
-* has\_many/belongs\_to会创建喝多方法, 通过关联创建对象;
-* user.microposts.build(...)创建一个微博对象, 兵自动把这个微博和用户关联起来;
+* has\_many/belongs\_to会创建很多方法, 通过关联创建对象;
+* user.microposts.build(...)创建一个微博对象, 并自动把这个微博和用户关联起来;
 * Rails支持使用default\_scope制定默认排序方式;
 * 作用域方法的参数是匿名函数;
 * 加入dependent: :destroy参数后, 删除对象时也回把关联的微博删除;
