@@ -1444,7 +1444,7 @@ end
 * 我们可以分别在用户和微博模型中使用has\_many和belongs\_to方法实现一个用户有多篇微博的模型;
 * has\_many/belongs\_to会创建很多方法, 通过关联创建对象;
 * user.microposts.build(...)创建一个微博对象, 并自动把这个微博和用户关联起来;
-* Rails支持使用default\_scope制定默认排序方式;
+* Rails支持使用default\_scope指定默认排序方式;
 * 作用域方法的参数是匿名函数;
 * 加入dependent: :destroy参数后, 删除对象时也回把关联的微博删除;
 * 分页和数量统计都可以通过关联调用, 这样写出的代码很简洁;
