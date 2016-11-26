@@ -656,7 +656,7 @@ _代码清单11.33: 测试 略_
 
 表单不放再单独的页面/microposts/new中, 而是在网站的首页.
 先来编写微博控制器的create动作(与用户控制器的create动作类似), 主要区别是: 创建微博时, 要使用用户和微博的关联关系构建微博对象.
-注意micropost_params中的简装参数, 只允许通过Web修改微博的content属性
+注意micropost_params中的健壮参数, 只允许通过Web修改微博的content属性
 
 _代码清单11.34: 微博控制器的create动作 app/controllers/microposts\_controller.rb_
 
