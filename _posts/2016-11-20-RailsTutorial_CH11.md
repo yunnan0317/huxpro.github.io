@@ -749,21 +749,24 @@ _代码清单11.37: 微博创建表单局部视图 app/views/shared/\_micropost\
 
 _代码清单11.38: 在home动作中定义@micropost实例变量 app/controllers/static\_pages\_controller.rb_
 
-    class StaticPagesController < ApplicationController
-      def home
-        @micropost = current_user.microposts.build if logged_in?
-      end
+``` ruby
+class StaticPagesController < ApplicationController
+  def home
+    @micropost = current_user.microposts.build if logged_in?
+  end
 
-      def help
-      end
+  def help
+  end
 
-      def about
-      end
+  def about
+  end
 
-      def contact
-      end
+  def contact
+  end
 
-    end
+end
+```
+
 
 _代码清单11.39: 能使用其他对象的错误消息局部视图 app/views/shared/\_error\_message.html.erb_
 
@@ -1229,7 +1232,11 @@ gem 'boostrap-will_paginate', '0.0.10'
 ```
 
 
-执行`bundle install`. CarrierWave含有一个Rails生成器, 用于生成图片上传程序, 我们要创造一个名为picture的上传程序`rails generate uploader Picture`.
+执行`bundle install`. CarrierWave含有一个Rails生成器, 用于生成图片上传程序, 我们要创造一个名为picture的上传程序
+
+``` shell
+rails generate uploader Picture
+```
 
 CarrierWaver上传的图片应该对应于ActiveRecord模型中的一个属性, 这个属性只需存储图片的文件名字符串.
 
@@ -1244,73 +1251,86 @@ CarrierWaver上传的图片应该对应于ActiveRecord模型中的一个属性, 
 
 添加picture属性到微博模型中
 
-    rails generate migration add_picture_to_microposts picture:string
-    bundle exec rake db:migrate
+``` shell
+rails generate migration add_picture_to_microposts picture:string
+bundle exec rake db:migrate
+```
 
 告诉CarrierWave把图片和模型关联起来的方式是使用mount\_uploader. 第一个参数是属性的符号形式, 第二个参数是上传程序的类名. `mount_uploader :picture, PictureUploader`. 把上传程序添加到微博模型.
 
 _代码清单11.56: 在微博模型中添加图片上传程序 app/models/micropost.rb_
 
-    class Micropost < ActiveRecord::Base
-      belongs_to :user
-      default_scope -> { order(created_at: :desc) }
-      mount_uploader :picture, PictureUploader
-      validates :user_id, presence: true
-      validates :content, presence: true, length: { maximum: 140 }
-    end
+``` ruby
+class Micropost < ActiveRecord::Base
+  belongs_to :user
+  default_scope -> { order(created_at: :desc) }
+  mount_uploader :picture, PictureUploader
+  validates :user_id, presence: true
+  validates :content, presence: true, length: { maximum: 140 }
+end
+```
 
 为了在首页添加图片上传功能, 我们需要在发布微博的表单中添加一个file\_field标签.
 
 _代码清单11.57: 在发布微博的表单中添加图片上传按钮 app/views/shared/\_micropost\_form.html.erb_
 
-    <%= form_for(@micropost, html: {multipar: true}) do |f| %>
-      <%= render 'shared/error_messages', object: f.object %>
-      <div class="field">
-          <%= f.text_area :content, placeholder: "Compose new micropost..." %>
-      </div>
-      <%= f.submit "Post", class: "btn btn-primary" %>
-      <span class="picture">
-          <%= f.flie_field :picture%>
-      </span>
-    <% end %>
+``` html+erb
+<%= form_for(@micropost, html: {multipar: true}) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+  <div class="field">
+      <%= f.text_area :content, placeholder: "Compose new micropost..." %>
+  </div>
+  <%= f.submit "Post", class: "btn btn-primary" %>
+  <span class="picture">
+      <%= f.flie_field :picture%>
+  </span>
+<% end %>
+```
+
 
 form\_for中指定了html: { multipart: true }参数. 为了支持文件上传, 必须指定. 最后把picture属性添加到可以通过Web修改的属性.
 
 _代码清单11.58: 把picture添加到允许修改的属性列表中 app/controllers/microposts\_controller.rb_
 
-    class MicropostsController < ApplicationController
-      before_action :logged_in_user, only: [:create, :destroy]
-      before_action :correct_user, only: :destroy
-      ...
-      private
-        def micropost_params
-          params.require(:micropost).permit(:content, :picture)
-        end
-
-        def correct_user
-          @micropost = current_user.microposts.find_by(id: params[:id])
-          redirect_to root_url if @micropost.nil?
-        end
+``` ruby
+class MicropostsController < ApplicationController
+  before_action :logged_in_user, only: [:create, :destroy]
+  before_action :correct_user, only: :destroy
+  .
+  .
+  .
+  private
+    def micropost_params
+      params.require(:micropost).permit(:content, :picture)
     end
+
+    def correct_user
+      @micropost = current_user.microposts.find_by(id: params[:id])
+      redirect_to root_url if @micropost.nil?
+    end
+end
+```
 
 上传图片后, 微博局部视图中可以使用image\_tag辅助方法渲染. 注意, 使用了picture?布尔值方法, 不过没有图片, 就不会显示img标签. 这个方法由CarrierWave自动创建, 方法名根据保存图片文件名的属性而定.
 
 _代码清单11.59: 在微博中显示图片 app/view/microposts/\_micropost.html.erb_
 
-    <li id="micropost-<%= micropost.id %>">
-        <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>
-        <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
-        <span class="content">
-            <%= micropost.content %>
-            <%= image_tag micropost.picture.url if micropost.picture? %>
-        </span>
-        <span class="timestamp">
-            Posted <%= time_ago_in_words(micropost.created_at) %> ago.
-            <% if cureent_user?(micropost.user) %>
-              <%= link_to "delete , micropost, method: delete, data: { confirm: "You sure?" }%>
-            <% end %>
-        </span>
-    </li>
+``` html+erb
+<li id="micropost-<%= micropost.id %>">
+    <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>
+    <span class="user"><%= link_to micropost.user.name, micropost.user %></span>
+    <span class="content">
+        <%= micropost.content %>
+        <%= image_tag micropost.picture.url if micropost.picture? %>
+    </span>
+    <span class="timestamp">
+        Posted <%= time_ago_in_words(micropost.created_at) %> ago.
+        <% if cureent_user?(micropost.user) %>
+          <%= link_to "delete , micropost, method: delete, data: { confirm: "You sure?" }%>
+        <% end %>
+    </span>
+</li>
+```
 
 
 ## 11.4.2
@@ -1321,62 +1341,70 @@ _代码清单11.59: 在微博中显示图片 app/view/microposts/\_micropost.htm
 
 _代码清单11.60: 限制可上传的图片类型 app/uploaders/picture\_uploader.rb_
 
-    class PictureUploader < CarrierWave::Uploader::Base
-      storeage :file
+``` ruby
+class PictureUploader < CarrierWave::Uploader::Base
+  storeage :file
 
-      # Override the directory where uploaded files will be store.
-      # This is a sensible default for uploaders that are meant to be mounted:
-      def store_dir
-        "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-      end
+  # Override the directory where uploaded files will be store.
+  # This is a sensible default for uploaders that are meant to be mounted:
+  def store_dir
+    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+  end
 
-      # 添加一个白名单, 制定允许上传的图片类型
-      def extension_white_list
-        %w(jpg jpeg gif png)
-      end
-    end
+  # 添加一个白名单, 制定允许上传的图片类型
+  def extension_white_list
+    %w(jpg jpeg gif png)
+  end
+end
+```
+
 
 图片的大小限制在微博模型中设定, Rails没有为文件大小提供现成的验证方法, 需要自定义, 命名为picture\_size, 调用定义方法使用validate而不是validates.
 
-    class Micropost < ActiveRecord::Base
-      belongs_to :user
-      default_scope -> { order(created_at: :desc) }
-      mount_uploader :picture, PictureUploader
-      validates :user_id, presence: true
-      validates :content, presence: true, length: { maximum: 140 }
-      validate :picture_size
+``` ruby
+class  Micropost < ActiveRecord::Base
+  belongs_to :user
+  default_scope -> { order(created_at: :desc) }
+  mount_uploader :picture, PictureUploader
+  validates :user_id, presence: true
+  validates :content, presence: true, length: { maximum: 140 }
+  validate :picture_size
 
-      private
-        def picture_size
-          if picture.size > 5.megabytes
-            errors.add(:picture, "should be less than 5MB")
-          end
-        end
+  private
+    def picture_size
+      if picture.size > 5.megabytes
+        errors.add(:picture, "should be less than 5MB")
+      end
     end
+end
+```
 
 在客户端检查上传的图片. 首先在file\_field方法中使用accept限制图片格式(有效格式使用MIME类型指定). 然后编写JavaScript(更确切额说是jQuery代码)来限制大小.
 
 _代码清单11.62: 使用jQuery检查文件大小 app/views/shared/\_micropost\_form.html.erb_
 
-    <%= form_for(@micropost, html: { multipart: true }) do |f| %>
-    <%= render 'shared/error_messages', object: f.object %>
-    <div class="field">
-        <%= f.text_area :content, placeholder: "Compost new micropost..." %>
-    </div>
-    <%= f.submit "Post", class: "btn btn-primary" %>
-    <span class="picture">
-        <%= f.field :picture, accept: 'image/jpeg, image/gif, image/png' %>
-    </span>
-    <% end %>
+``` html+erb
+<%= form_for(@micropost, html: { multipart: true }) do |f| %>
+<%= render 'shared/error_messages', object: f.object %>
+<div class="field">
+    <%= f.text_area :content, placeholder: "Compost new micropost..." %>
+</div>
+<%= f.submit "Post", class: "btn btn-primary" %>
+<span class="picture">
+    <%= f.field :picture, accept: 'image/jpeg, image/gif, image/png' %>
+</span>
+<% end %>
 
-    <script type="text/javascript">
-     $('#micropost_picture').bind('change', function(){
-         size_in_megabytes = this.files[0].size/1024/1024;
-         if (size_in_megabytes > 5) {
-             alert('Maximum file size is 5MB. Please choose a smaller file.');
-         }
-     });
-    </script>
+<script type="text/javascript">
+ $('#micropost_picture').bind('change', function(){
+     size_in_megabytes = this.files[0].size/1024/1024;
+     if (size_in_megabytes > 5) {
+         alert('Maximum file size is 5MB. Please choose a smaller file.');
+     }
+ });
+</script>
+```
+
 
 ## 11.4.3 调整图片尺寸
 
@@ -1384,23 +1412,26 @@ _代码清单11.62: 使用jQuery检查文件大小 app/views/shared/\_micropost\
 
 _代码清单11.63: 配置图片上传程序, 调整图片的尺寸 app/uploaders/picture\_uploader.rb_
 
-    class PictureUploader < CarrierWave::Uploader::Base
-      include CarrierWave::MiniMagick
-      process resize_to_limit: [400, 400]
+``` ruby
+class PictureUploader < CarrierWave::Uploader::Base
+  include CarrierWave::MiniMagick
+  process resize_to_limit: [400, 400]
 
-      storage :file
+  storage :file
 
-      # Override the directory where uploaded files will be stored.
-      # This is a sensible default for uploaders that are meant to be mounted:
-      def store_dir
-        "uploads/#{model.class.to_s.underscore}/#{mount_as}/#{model.id}"
-      end
+  # Override the directory where uploaded files will be stored.
+  # This is a sensible default for uploaders that are meant to be mounted:
+  def store_dir
+    "uploads/#{model.class.to_s.underscore}/#{mount_as}/#{model.id}"
+  end
 
-      # 添加一个白名单, 指定允许上传的图片类型
-      def extension_white_list
-        %w(jpg jpeg gif png)
-      end
-    end
+  # 添加一个白名单, 指定允许上传的图片类型
+  def extension_white_list
+    %w(jpg jpeg gif png)
+  end
+end
+```
+
 
 ## 11.4.4 在生产环境中上传图片
 
@@ -1411,11 +1442,11 @@ _代码清单11.63: 配置图片上传程序, 调整图片的尺寸 app/uploader
 * 和用户一样, 微博也是一种资源, 而且有对应的ActiveRecord模型;
 * Rails支持多键索引;
 * 我们可以分别在用户和微博模型中使用has\_many和belongs\_to方法实现一个用户有多篇微博的模型;
-* has\_many/belongs\_to会创建喝多方法, 通过关联创建对象;
-* user.microposts.build(...)创建一个微博对象, 兵自动把这个微博和用户关联起来;
-* Rails支持使用default\_scope制定默认排序方式;
+* has\_many/belongs\_to会创建很多方法, 通过关联创建对象;
+* user.microposts.build(...)创建一个微博对象, 并自动把这个微博和用户关联起来;
+* Rails支持使用default\_scope指定默认排序方式;
 * 作用域方法的参数是匿名函数;
-* 加入dependent: :destroy参数后, 删除对象时也回把关联的微博删除;
+* 加入dependent: :destroy参数后, 删除对象时也会把关联的微博删除;
 * 分页和数量统计都可以通过关联调用, 这样写出的代码很简洁;
 * 在固件中可以创建关联;
 * 可以向Rails局部视图中传入变量;
