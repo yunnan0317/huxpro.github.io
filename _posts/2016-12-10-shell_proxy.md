@@ -68,3 +68,5 @@ curl https://www.facebook.com -m 10 -o out.html
 `-o out.html`抓取页面输出到`./out.html`
 
 后面还可以添加参数`-socks5 http://localhost:1080`, 可以测试不同的代理形式
+
+socks5代理转http代理也可以用privoxy，目前在Phicomm K3上使用的就是privoxy。
