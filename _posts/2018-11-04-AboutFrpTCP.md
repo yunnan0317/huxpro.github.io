@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "nas\miner\router监控"
+title: "nas\\miner\\router监控"
 subtitle: " \"笔记\" " 
 date: 2018-11-04 21:00:00
 author: "nam"
