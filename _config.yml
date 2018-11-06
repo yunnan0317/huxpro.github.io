@@ -1,6 +1,7 @@
 #################
 # Site settings #
 #################
+remote_theme: "mmistakes/minimal-mistakes"
 title: Nam Blog
 SEOTitle: 云楠的博客 | Nam Blog
 header-img: img/home-bg.jpg
