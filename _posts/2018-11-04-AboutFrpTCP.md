@@ -49,4 +49,6 @@ google后才知道运营商给每个设备配了一个逻辑ID(LOID),
 然而transmission仍然会写在挂载的目录下面, router的几十M的空间都不够折腾一下的,
 有空可以查查如何保证SMB自动重连.
 
+5. transmission下载到NAS上显示乱码，使用convmv -f UTF-8 -t iso8859-1 -r --notest
+   --nosmart *转换
 以上.
